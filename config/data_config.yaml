@@ -1,0 +1,54 @@
+# Data Processing Configuration
+
+# Data Schema
+schema:
+  columns:
+    - sentiment
+    - id
+    - date
+    - query
+    - user
+    - text
+  
+  required_columns:
+    - sentiment
+    - text
+  
+  dtypes:
+    sentiment: int8
+    id: int64
+
+# Text Preprocessing
+text_preprocessing:
+  lowercase: true
+  remove_urls: true
+  remove_mentions: true
+  remove_hashtags: true
+  remove_extra_whitespace: true
+  
+  tokenization:
+    method: "nltk"
+    language: "english"
+
+# Data Splits
+data_splits:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  stratify: true
+  shuffle: true
+
+# Processing
+processing:
+  chunk_size: 100000
+  show_progress: true
+  n_workers: 4
+
+# Sentiment Labels
+sentiment_labels:
+  negative: 0
+  positive: 4
+  
+  binary_mapping:
+    0: 0  # Negative
+    4: 1  # Positive

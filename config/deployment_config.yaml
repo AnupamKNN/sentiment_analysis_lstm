@@ -1,0 +1,46 @@
+# Deployment Configuration
+
+# Environment
+environment: "production"
+
+# Server
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  timeout: 60
+  keepalive: 5
+
+# CORS
+cors:
+  allow_origins:
+    - "http://localhost:3000"
+    - "http://localhost:5173"
+  allow_credentials: true
+  allow_methods: ["*"]
+  allow_headers: ["*"]
+
+# Model Serving
+model_serving:
+  model_path: "final_models/trained_models/lstm_attention_model.keras"
+  tokenizer_path: "final_models/vectorizers/tokenizer.pkl"
+  max_sequence_length: 50
+  prediction_threshold: 0.5
+
+# Performance
+performance:
+  max_concurrent_requests: 100
+  request_timeout: 30
+  batch_size: 32
+
+# Logging
+logging:
+  level: "INFO"
+  format: "[%(asctime)s] %(name)s - %(levelname)s - %(message)s"
+  file: "logs/api.log"
+
+# Monitoring
+monitoring:
+  enabled: true
+  metrics_port: 9090
+  health_check_interval: 30

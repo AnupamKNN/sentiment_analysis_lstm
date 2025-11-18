@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  sentiment-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sentiment_analysis_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./final_models:/app/final_models
+      - ./logs:/app/logs
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    networks:
+      - sentiment-network
+
+  # Optional: Frontend service (uncomment when frontend is ready)
+  # sentiment-frontend:
+  #   image: node:18-alpine
+  #   container_name: sentiment_frontend
+  #   working_dir: /app
+  #   volumes:
+  #     - ./frontend:/app
+  #   ports:
+  #     - "3000:3000"
+  #   command: npm run dev
+  #   depends_on:
+  #     - sentiment-api
+  #   networks:
+  #     - sentiment-network
+
+networks:
+  sentiment-network:
+    driver: bridge

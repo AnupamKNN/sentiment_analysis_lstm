@@ -1,0 +1,8 @@
+{
+  "best_model": "LSTM + Attention",
+  "best_accuracy": 0.8372,
+  "best_f1_score": 0.8368,
+  "improvement_vs_bow": 8.081590498321727,
+  "improvement_vs_tfidf": 6.13590263691685,
+  "timestamp": "2025-11-12 19:24:59"
+}

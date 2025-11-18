@@ -1,0 +1,16 @@
+method,accuracy,f1_score,vocabulary
+Advanced: expanded_vocab,0.7888,0.7894736842105262,15000
+N-gram: optimized_unigrams_bigrams,0.7844,0.7861111111111112,7500
+Advanced: strict_filtering,0.7823,0.7843486874690442,5000
+N-gram: unigrams_trigrams_tfidf,0.782,0.7842865624381555,5000
+N-gram: unigrams_bigrams_tfidf,0.7815,0.7838131987731275,5000
+Advanced: l2_normalized,0.7815,0.7838131987731275,5000
+Basic: large_vocab_tfidf,0.7762,0.7770916334661354,10000
+Basic: no_idf_tfidf,0.7758,0.7763814083383204,5000
+Basic: simple_tfidf,0.7753,0.7764846314532975,5000
+Basic: sublinear_tfidf,0.7747,0.7754857997010465,5000
+N-gram: unigrams_tfidf,0.7744,0.7757455268389661,5000
+Basic: binary_tfidf,0.7742,0.7752786624203821,5000
+Advanced: l1_normalized,0.7715,0.7692618398465111,5000
+Advanced: no_normalization,0.7653,0.7696987538023747,5000
+N-gram: bigrams_trigrams_tfidf,0.6938,0.7127040720585476,5000

@@ -1,0 +1,29 @@
+{
+  "processing_date": "2025-11-08 11:44:45",
+  "total_records": 1600000,
+  "sentiment_distribution": {
+    "0": 800000,
+    "4": 800000
+  },
+  "temporal_range": {
+    "start": "2009-04-06 22:19:45",
+    "end": "2009-06-25 10:28:31",
+    "span_days": 79
+  },
+  "text_statistics": {
+    "avg_text_length": 65.70832375,
+    "avg_token_count": 15.255811875,
+    "total_unique_tokens": 367895
+  },
+  "preprocessing_pipeline": {
+    "step_1": "Standard social media cleaning",
+    "step_2": "NLTK word tokenization",
+    "step_3": "No stopword removal (optimal for deep learning)",
+    "date_processing": "UTC timezone, temporal features extracted"
+  },
+  "data_quality": {
+    "completeness_pct": 100.0,
+    "empty_texts": 0,
+    "empty_tokens": 0
+  }
+}

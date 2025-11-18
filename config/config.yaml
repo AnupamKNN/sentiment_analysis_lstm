@@ -1,0 +1,43 @@
+# Main Configuration File
+
+# Project Information
+project:
+  name: "Social Media Sentiment Analysis Platform"
+  version: "1.0.0"
+  description: "Deep Learning-based sentiment analysis for social media text"
+
+# Dataset Configuration
+dataset:
+  source: "kaggle"
+  slug: "kazanova/sentiment140"
+  name: "Sentiment140"
+
+# Directories
+directories:
+  data:
+    raw: "Artifacts/data_ingestion/raw"
+    processed: "Artifacts/data_ingestion/processed"
+  models:
+    trained: "Artifacts/model_trainer/trained_models"
+    checkpoints: "Artifacts/model_trainer/checkpoints"
+  final_models:
+    trained: "final_models/trained_models"
+    vectorizers: "final_models/vectorizers"
+    preprocessing: "final_models/preprocessing"
+  artifacts: "Artifacts"
+  logs: "logs"
+  results: "training_results"
+
+# Model Configuration
+model:
+  name: "LSTM + Attention"
+  type: "deep_learning"
+  architecture: "lstm_attention"
+  
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+  log_level: "info"

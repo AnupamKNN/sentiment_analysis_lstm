@@ -1,0 +1,2 @@
+dataset_records,tokenization_method,processing_time_minutes,avg_tokens_per_tweet,total_tokens,estimated_vocabulary_size,empty_tokenizations,date_conversion_success_rate,timestamp
+1600000,nltk_word_tokenize,2.231262707710266,15.255813125,24409301,244680,0,100.0,2025-11-05 12:09:15

@@ -1,0 +1,2 @@
+original_records,cleaned_records,processing_time_seconds,avg_length_reduction_pct,empty_texts_created,cleaning_method,timestamp
+1600000,1600000,0.06884241104125977,11.344310810438971,2815,standard_social_media_cleaning,2025-11-02 16:27:54
