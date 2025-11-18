@@ -1,0 +1,5 @@
+outs:
+- md5: 9a8cfa26ca85d2fb6a44a72d884e99df
+  size: 79958528
+  hash: md5
+  path: word2vec_model.pkl.wv.vectors.npy

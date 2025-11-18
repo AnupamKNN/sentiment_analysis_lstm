@@ -1,0 +1,4 @@
+[core]
+    remote = origin
+['remote "origin"']
+    url = https://dagshub.com/AnupamKNN/sentiment_analysis_lstm.dvc

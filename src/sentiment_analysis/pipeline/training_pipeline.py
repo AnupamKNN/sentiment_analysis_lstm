@@ -16,9 +16,7 @@ from src.sentiment_analysis.entity.config_entity import (
 from src.sentiment_analysis.components.data_ingestion import DataIngestion
 from src.sentiment_analysis.components.data_preprocessing import DataPreprocessing
 from src.sentiment_analysis.components.feature_engineering import FeatureEngineering
-from src.sentiment_analysis.components.model_trainer import ModelTrainer
-from src.sentiment_analysis.components.model_evaluation import ModelEvaluation  # ADDED
-from src.sentiment_analysis.components.model_pusher import ModelPusher  # ADDED
+from src.sentiment_analysis.components.model_trainer import ModelTrainer   
 
 
 class TrainingPipeline:
@@ -105,72 +103,6 @@ class TrainingPipeline:
         except Exception as e:
             raise SentimentAnalysisException(f"Model training failed: {str(e)}", sys)
     
-    def start_model_evaluation(self, model_trainer_artifact, feature_artifact):
-        """Evaluate trained model on test set"""
-        try:
-            logger.info("="*50)
-            logger.info("STEP 5: MODEL EVALUATION")
-            logger.info("="*50)
-            
-            # Load test data
-            data_path = f"{Path(feature_artifact.tokenizer_path).parent}/data_splits.npz"
-            data = np.load(data_path)
-            X_test, y_test = data['X_test'], data['y_test']
-            
-            logger.info(f"Evaluating on {len(X_test):,} test samples")
-            
-            # Evaluate model
-            model_evaluation = ModelEvaluation(
-                model_path=model_trainer_artifact.trained_model_path,
-                tokenizer_path=feature_artifact.tokenizer_path
-            )
-            
-            # Returns ModelEvaluationArtifact now
-            evaluation_artifact = model_evaluation.evaluate(
-                X_test, y_test, 
-                model_name="LSTM + Attention"
-            )
-            
-            logger.info("✅ Model evaluation completed")
-            return evaluation_artifact
-        
-        except Exception as e:
-            raise SentimentAnalysisException(f"Model evaluation failed: {str(e)}", sys)
-
-    
-    def start_model_pusher(self, model_trainer_artifact, evaluation_results):
-        """
-        NEW: Push model to production only if it meets criteria
-        """
-        try:
-            logger.info("="*50)
-            logger.info("STEP 6: MODEL PUSHER")
-            logger.info("="*50)
-            
-            # Check if model meets minimum criteria
-            accuracy_threshold = 0.80  # 80% minimum accuracy
-            metrics = evaluation_results['metrics']
-            
-            if metrics['accuracy'] >= accuracy_threshold:
-                logger.info(f"✅ Model meets criteria (accuracy: {metrics['accuracy']:.4f} >= {accuracy_threshold})")
-                
-                # Push model to production
-                model_pusher = ModelPusher(
-                    model_path=model_trainer_artifact.trained_model_path,
-                    final_path=model_trainer_artifact.trained_model_path  # Already in final_models
-                )
-                
-                pusher_artifact = model_pusher.push_model()
-                
-                logger.info("✅ Model pushed to production")
-                return pusher_artifact
-            else:
-                logger.warning(f"⚠️  Model does not meet criteria (accuracy: {metrics['accuracy']:.4f} < {accuracy_threshold})")
-                logger.warning("Model NOT pushed to production")
-                return None
-        
-        except Exception as e:
-            raise SentimentAnalysisException(f"Model pusher failed: {str(e)}", sys)
     
     def run_pipeline(self):
         """Execute complete training pipeline"""
@@ -197,19 +129,6 @@ class TrainingPipeline:
             )
             # Returns: ModelTrainerArtifact
             
-            # Step 5: Model Evaluation
-            evaluation_artifact = self.start_model_evaluation(
-                model_trainer_artifact,
-                feature_engineering_artifact
-            )
-            # Returns: ModelEvaluationArtifact
-            
-            # Step 6: Model Pusher
-            pusher_artifact = self.start_model_pusher(
-                model_trainer_artifact,
-                evaluation_artifact
-            )
-            # Returns: ModelPusherArtifact
             
             logger.info("✅ TRAINING PIPELINE COMPLETED")
             
@@ -218,8 +137,6 @@ class TrainingPipeline:
                 'preprocessing': data_preprocessing_artifact,
                 'feature_engineering': feature_engineering_artifact,
                 'model_trainer': model_trainer_artifact,
-                'evaluation': evaluation_artifact,
-                'pusher': pusher_artifact
             }
         
         except Exception as e:

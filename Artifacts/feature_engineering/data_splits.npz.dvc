@@ -1,0 +1,5 @@
+outs:
+- md5: 3b7dd04a8aa119c7125a2a46c4613198
+  size: 332801278
+  hash: md5
+  path: data_splits.npz

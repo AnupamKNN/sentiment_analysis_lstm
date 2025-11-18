@@ -1,50 +1,61 @@
 """
-MLflow utilities for experiment tracking
+MLflow utilities
 """
 
+import os
 import mlflow
 import mlflow.keras
 from typing import Dict, Any
-from pathlib import Path
 from src.sentiment_analysis.logging.logger import logging as logger
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Get credentials
+tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
+username = os.getenv("MLFLOW_TRACKING_USERNAME")
+password = os.getenv("MLFLOW_TRACKING_PASSWORD")
+
+# Validate credentials
+if not all([tracking_uri, username, password]):
+    logger.warning("⚠️  Missing MLFLOW environment variables")
+    logger.warning("   MLflow tracking may not work properly")
+else:
+    # SET ENVIRONMENT VARIABLES IMMEDIATELY (This prevents mlruns creation!)
+    os.environ['MLFLOW_TRACKING_URI'] = tracking_uri
+    os.environ['MLFLOW_TRACKING_USERNAME'] = username
+    os.environ['MLFLOW_TRACKING_PASSWORD'] = password
+    
+    # Set tracking URI explicitly
+    mlflow.set_tracking_uri(tracking_uri)
+    
+    logger.info(f"✅ MLflow configured: {tracking_uri}")
 
 
 class MLflowTracker:
-    """
-    Centralized MLflow tracking utilities
-    """
+    """Simplified MLflow tracker"""
     
-    def __init__(self, experiment_name: str = "sentiment_analysis", tracking_uri: str = "mlruns"):
-        """
-        Initialize MLflow tracker
-        
-        Args:
-            experiment_name: Name of the experiment
-            tracking_uri: MLflow tracking URI (local directory or remote server)
-        """
+    def __init__(self, experiment_name: str = "sentiment_analysis"):
+        """Initialize MLflow experiment"""
         self.experiment_name = experiment_name
-        self.tracking_uri = tracking_uri
         
-        # Set tracking URI
-        mlflow.set_tracking_uri(tracking_uri)
-        
-        # Create or get experiment
-        try:
-            self.experiment_id = mlflow.create_experiment(experiment_name)
-        except:
-            self.experiment_id = mlflow.get_experiment_by_name(experiment_name).experiment_id
-        
+        # Set experiment (will use env vars set above)
         mlflow.set_experiment(experiment_name)
-        logger.info(f"MLflow experiment: {experiment_name} (ID: {self.experiment_id})")
+        logger.info(f"✅ MLflow experiment: {experiment_name}")
     
-    def start_run(self, run_name: str = None):
+    def start_run(self, run_name: str = None, tags: Dict[str, Any] = None):
         """Start MLflow run"""
-        return mlflow.start_run(run_name=run_name)
+        run = mlflow.start_run(run_name=run_name)
+        if tags:
+            mlflow.set_tags(tags)
+        logger.info(f"✅ Started run: {run.info.run_id}")
+        return run
     
     def log_params(self, params: Dict[str, Any]):
         """Log parameters"""
         mlflow.log_params(params)
-        logger.info(f"Logged {len(params)} parameters to MLflow")
+        logger.info(f"✅ Logged {len(params)} parameters")
     
     def log_metrics(self, metrics: Dict[str, float], step: int = None):
         """Log metrics"""
@@ -54,23 +65,28 @@ class MLflowTracker:
         """Log single metric"""
         mlflow.log_metric(key, value, step=step)
     
-    def log_model(self, model, artifact_path: str = "model"):
+    def log_model(self, model, artifact_path: str = "model", 
+                  registered_model_name: str = None):
         """Log Keras model"""
-        mlflow.keras.log_model(model, artifact_path)
-        logger.info(f"Model logged to MLflow: {artifact_path}")
+        try:
+            mlflow.keras.log_model(
+                model, 
+                artifact_path,
+                registered_model_name=registered_model_name
+            )
+            logger.info(f"✅ Model logged: {artifact_path}")
+        except Exception as e:
+            logger.warning(f"⚠️  Could not log model: {str(e)}")
     
     def log_artifact(self, local_path: str, artifact_path: str = None):
-        """Log artifact file"""
+        """Log artifact"""
         mlflow.log_artifact(local_path, artifact_path)
     
-    def log_artifacts(self, local_dir: str, artifact_path: str = None):
-        """Log directory of artifacts"""
-        mlflow.log_artifacts(local_dir, artifact_path)
-    
     def set_tags(self, tags: Dict[str, Any]):
-        """Set run tags"""
+        """Set tags"""
         mlflow.set_tags(tags)
     
-    def end_run(self):
-        """End MLflow run"""
+    def end_run(self, status: str = "FINISHED"):
+        """End run"""
         mlflow.end_run()
+        logger.info(f"✅ Run ended: {status}")

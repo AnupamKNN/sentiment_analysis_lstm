@@ -1,0 +1,5 @@
+outs:
+- md5: b9e4758abff42afab2f19a64ce245ee7
+  size: 18363937
+  hash: md5
+  path: lstm_attention_model.keras

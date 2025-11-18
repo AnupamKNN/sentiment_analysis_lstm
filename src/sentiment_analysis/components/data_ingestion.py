@@ -1,5 +1,5 @@
 """
-Data Ingestion Component - Optimized with Smart Caching
+Data Ingestion Component
 """
 
 import os

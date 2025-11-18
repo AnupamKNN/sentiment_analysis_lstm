@@ -1,0 +1,5 @@
+outs:
+- md5: 4adaf60581eea9e2a34f9cda987ebe74
+  size: 79958528
+  hash: md5
+  path: word2vec_model.pkl.syn1neg.npy

@@ -34,8 +34,8 @@ class FeatureEngineeringArtifact:
 @dataclass
 class ModelTrainerArtifact:
     """Output from model training component"""
-    trained_model_path: str          # Production model path
-    checkpoint_path: str              # Best checkpoint path
+    trained_model_path: str          
+    checkpoint_path: str             
     training_time_minutes: float
     total_epochs: int
     best_val_accuracy: float

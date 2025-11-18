@@ -2,6 +2,7 @@
 Feature Engineering Component
 """
 
+import os
 import sys
 import pandas as pd
 import numpy as np
@@ -14,6 +15,7 @@ from src.sentiment_analysis.entity.config_entity import FeatureEngineeringConfig
 from src.sentiment_analysis.entity.artifact_entity import (
     DataPreprocessingArtifact, FeatureEngineeringArtifact
 )
+from src.sentiment_analysis.constants import ARTIFACTS_DIR
 from src.sentiment_analysis.utils.ml_utils.preprocessing.feature_extraction import FeatureExtractor
 from src.sentiment_analysis.utils.main_utils.utils import save_object, save_numpy_array
 from src.sentiment_analysis.constants.model_constants import *
@@ -173,7 +175,13 @@ class FeatureEngineering:
             save_numpy_array(self.config.embedding_matrix_path, data['embedding_matrix'])
             
             # Save data splits
-            splits_path = f"{Path(self.config.tokenizer_path).parent}/data_splits.npz"
+
+            data_splits_path = "/home/anupam9k/AI_Resume_Projects/Social_Media_Sentiment_and_Trend_Analysis_Platform/Artifacts/feature_engineering/data_splits.npz"
+
+            # Create directory if it does not exist
+            splits_path = os.path.join(ARTIFACTS_DIR, "feature_engineering", "data_splits.npz")
+            os.makedirs(os.path.dirname(splits_path), exist_ok=True)
+
             np.savez(
                 splits_path,
                 X_train=data['X_train'], y_train=data['y_train'],

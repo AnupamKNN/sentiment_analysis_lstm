@@ -4,6 +4,23 @@ Project-wide constants
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# CRITICAL: Set MLflow env vars immediately
+MLFLOW_TRACKING_URI = os.getenv('MLFLOW_TRACKING_URI')
+MLFLOW_TRACKING_USERNAME = os.getenv('MLFLOW_TRACKING_USERNAME')
+MLFLOW_TRACKING_PASSWORD = os.getenv('MLFLOW_TRACKING_PASSWORD')
+
+# Set as environment variables RIGHT NOW
+if MLFLOW_TRACKING_URI:
+    os.environ['MLFLOW_TRACKING_URI'] = MLFLOW_TRACKING_URI
+if MLFLOW_TRACKING_USERNAME:
+    os.environ['MLFLOW_TRACKING_USERNAME'] = MLFLOW_TRACKING_USERNAME
+if MLFLOW_TRACKING_PASSWORD:
+    os.environ['MLFLOW_TRACKING_PASSWORD'] = MLFLOW_TRACKING_PASSWORD
+
 
 # Project root directory
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
@@ -19,7 +36,8 @@ TRAINED_MODELS_DIR = os.path.join(MODELS_DIR, "trained_models")
 CHECKPOINTS_DIR = os.path.join(MODELS_DIR, "checkpoints")
 
 # Artifacts directories
-ARTIFACTS_DIR = os.path.join(PROJECT_ROOT, "artifacts")
+ARTIFACTS_DIR = os.path.join(PROJECT_ROOT, "Artifacts")
+TRAINED_MODELS_DIR = os.path.join(ARTIFACTS_DIR, "model_trainer/trained_models")
 
 # Final models directory (for production)
 FINAL_MODELS_DIR = os.path.join(PROJECT_ROOT, "final_models")
