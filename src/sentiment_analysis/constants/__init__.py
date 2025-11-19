@@ -44,6 +44,7 @@ FINAL_MODELS_DIR = os.path.join(PROJECT_ROOT, "final_models")
 FINAL_TRAINED_MODELS_DIR = os.path.join(FINAL_MODELS_DIR, "trained_models")
 FINAL_VECTORIZERS_DIR = os.path.join(FINAL_MODELS_DIR, "vectorizers")
 FINAL_PREPROCESSING_DIR = os.path.join(FINAL_MODELS_DIR, "preprocessing")
+EMBEDDING_MATRIX_DIR = os.path.join(ARTIFACTS_DIR, "preprocessing")
 
 # Logs directory
 LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")

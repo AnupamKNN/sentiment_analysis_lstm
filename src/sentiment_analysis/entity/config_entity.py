@@ -30,7 +30,7 @@ class FeatureEngineeringConfig:
     embedding_dim: int = EMBEDDING_DIM
     tokenizer_path: str = os.path.join(FINAL_VECTORIZERS_DIR, TOKENIZER_FILENAME)
     word2vec_path: str = os.path.join(FINAL_VECTORIZERS_DIR, WORD2VEC_FILENAME)
-    embedding_matrix_path: str = os.path.join(FINAL_PREPROCESSING_DIR, EMBEDDING_MATRIX_FILENAME)
+    embedding_matrix_path: str = os.path.join(EMBEDDING_MATRIX_DIR, EMBEDDING_MATRIX_FILENAME)
 
 
 @dataclass

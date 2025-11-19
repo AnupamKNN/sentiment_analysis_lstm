@@ -69,12 +69,13 @@ checkpoints/
 runs/
 
 # Ignore all files inside Artifacts except DVC metadata and keep folder structure
-Artifacts/**
 !Artifacts/**/*.dvc
 !Artifacts/**/*.dvc.*
 !Artifacts/**/.gitkeep
 !Artifacts/**/
 .env
+Artifacts/model_trainer/trained_models/lstm_attention_model.keras
+Artifacts/model_trainer/checkpoints/best_model.keras
 
 # Ignore tuner_dir
 Artifact/model_trainer/tuner_dir

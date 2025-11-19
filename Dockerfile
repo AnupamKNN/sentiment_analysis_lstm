@@ -9,9 +9,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Install python3.10, pip and system dependencies
+# Install python3.11, pip and system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.10 python3.10-venv python3-pip python3.10-distutils \
+    python3.11 python3.11-venv python3-pip python3.11-distutils \
     build-essential \
     ca-certificates \
     curl \
@@ -21,9 +21,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libsndfile1 \
     && rm -rf /var/lib/apt/lists/*
 
-
-# Ensure `python` and `pip` point to python3.10
-RUN ln -sf /usr/bin/python3.10 /usr/local/bin/python && \
+# Ensure `python` and `pip` point to python3.11
+RUN ln -sf /usr/bin/python3.11 /usr/local/bin/python && \
     ln -sf /usr/bin/pip3 /usr/local/bin/pip
 
 # Upgrade pip, setuptools, wheel
@@ -32,28 +31,27 @@ RUN python -m pip install --upgrade pip setuptools wheel
 # Copy only requirements first to leverage Docker cache
 COPY requirements.txt /app/requirements.txt
 
-# Install Python dependencies
-# NOTE: For PyTorch GPU wheels we expect requirements.txt to contain the +cu118 tags
+# Install Python dependencies EXCEPT torch packages
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# (Optional) download only necessary nltk corpora if your app uses NLTK
-# Replace 'punkt' with the corpora you actually need.
-RUN python - <<'PY'\n\
-import nltk\n\
-nltk.download('punkt')\n\
+
+# (Optional) download only necessary nltk corpora
+RUN python - <<'PY'
+import nltk
+nltk.download('punkt')
 PY
 
 # Copy application code
 COPY . /app
 
+# Remove any existing .egg-info directories to avoid pip metadata conflicts
+RUN find /app -name "*.egg-info" -exec rm -rf {} +
+
 # Create required directories
 RUN mkdir -p data/raw data/processed \
     models/trained_models models/checkpoints \
-    final_models/trained_models final_models/vectorizers final_models/preprocessing \
+    final_models/trained_models final_models/vectorizers \
     artifacts logs training_results
-
-# Install your package (editable mode if you need dev conveniences)
-RUN pip install --no-cache-dir -e .
 
 # Create non-root user for running the app (recommended)
 RUN useradd --create-home --shell /bin/bash appuser && chown -R appuser:appuser /app

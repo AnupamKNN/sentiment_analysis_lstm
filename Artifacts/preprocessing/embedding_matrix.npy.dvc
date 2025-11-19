@@ -1,0 +1,5 @@
+outs:
+- md5: 8141faf1bfd4bb73474ecda72c7610e5
+  size: 32000128
+  hash: md5
+  path: embedding_matrix.npy

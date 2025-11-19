@@ -61,3 +61,11 @@ htmlcov/
 
 # Artifacts
 Artifacts/
+
+# Misc
+final_models/vectorizers/word2vec_model.pkl.syn1neg.npy
+final_models/vectorizers/word2vec_model.pkl.wv.vectors.npy
+.dvc/
+.dvcignore
+file_paths.txt
+template.py
