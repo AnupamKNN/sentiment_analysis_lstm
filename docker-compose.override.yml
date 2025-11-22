@@ -1,0 +1,37 @@
+# version: "3.1"
+services:
+  scheduler:
+    # 1. GPU Reservation (Uncomment if NVIDIA Toolkit is installed on host)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    
+    # 2. Volume Mounts (Persist data to host)
+    volumes:
+      # UPDATED: Map local './Artifacts' directly to container 'Artifacts'
+      # This creates a 1:1 match with your code's configuration.
+      - ./Artifacts:/usr/local/airflow/Artifacts
+      - ./training_results:/usr/local/airflow/training_results
+      - ./exports:/usr/local/airflow/exports
+      - ./final_models:/usr/local/airflow/final_models
+      - ./src:/usr/local/airflow/src
+
+  webserver:
+    volumes:
+      - ./Artifacts:/usr/local/airflow/Artifacts
+      - ./training_results:/usr/local/airflow/training_results
+      - ./exports:/usr/local/airflow/exports
+      - ./final_models:/usr/local/airflow/final_models
+      - ./src:/usr/local/airflow/src
+
+  triggerer:
+    volumes:
+      - ./Artifacts:/usr/local/airflow/Artifacts
+      - ./training_results:/usr/local/airflow/training_results
+      - ./exports:/usr/local/airflow/exports
+      - ./final_models:/usr/local/airflow/final_models
+      - ./src:/usr/local/airflow/src

@@ -67,6 +67,8 @@ class HealthResponse(BaseModel):
     status: str
     model_loaded: bool
     version: str
+    model_version: Optional[str] = None
+    last_trained: Optional[str] = None
     
     class Config:
         schema_extra = {

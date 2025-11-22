@@ -1,38 +1,32 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   sentiment-api:
     build:
       context: .
-      dockerfile: Dockerfile
+      # Points to the renamed Dockerfile to avoid conflict with Astro's Dockerfile
+      dockerfile: Dockerfile.api 
     container_name: sentiment_analysis_api
     ports:
       - "8000:8000"
     volumes:
+      # Mounts for Model Persistence & Training Data
+      # These must match the paths in docker-compose.override.yml so Airflow and API share data
       - ./final_models:/app/final_models
       - ./logs:/app/logs
       - ./data:/app/data
+      - ./training_results:/app/training_results
+      - ./exports:/app/exports
     environment:
       - PYTHONUNBUFFERED=1
       - LOG_LEVEL=INFO
+      # Ensure these point to the mapped volumes
+      - TRAINING_RESULTS_DIR=/app/training_results
+      - EXPORTS_DIR=/app/exports
     restart: unless-stopped
+    # Uses default bridge network or you can define a custom one
     networks:
       - sentiment-network
-
-  # Optional: Frontend service (uncomment when frontend is ready)
-  # sentiment-frontend:
-  #   image: node:18-alpine
-  #   container_name: sentiment_frontend
-  #   working_dir: /app
-  #   volumes:
-  #     - ./frontend:/app
-  #   ports:
-  #     - "3000:3000"
-  #   command: npm run dev
-  #   depends_on:
-  #     - sentiment-api
-  #   networks:
-  #     - sentiment-network
 
 networks:
   sentiment-network:

@@ -9,11 +9,15 @@ from src.sentiment_analysis.exception.exception import SentimentAnalysisExceptio
 from src.sentiment_analysis.entity.config_entity import ModelTrainerConfig
 from src.sentiment_analysis.entity.artifact_entity import FeatureEngineeringArtifact, ModelTrainerArtifact
 from src.sentiment_analysis.utils.main_utils.utils import load_numpy_array
-from src.sentiment_analysis.utils.ml_utils.metric.metric import get_classification_score
+from src.sentiment_analysis.utils.ml_utils.metric.metric import get_classification_score, save_metrics
 from src.sentiment_analysis.utils.ml_utils.model.deep_learning_models import LSTMAttentionModel
 from src.sentiment_analysis.constants import ARTIFACTS_DIR
 import mlflow
 from dotenv import load_dotenv
+import json
+import numpy as _np
+import tempfile
+import os as _os
 
 load_dotenv()  # Load env variables early
 
@@ -43,7 +47,48 @@ class ModelTrainer:
             # Filter out None metrics e.g. auc_roc if missing
             filtered_metrics = {k: v for k, v in metrics.items() if v is not None}
             for key, val in filtered_metrics.items():
-                mlflow.log_metric(key, val)
+                try:
+                    # Log numeric scalars as metrics
+                    if isinstance(val, (int, float)) or (isinstance(val, _np.generic) and _np.isscalar(val)):
+                        mlflow.log_metric(key, float(val))
+                    else:
+                        # For arrays/lists/dicts (e.g. confusion matrix) log as parameter (stringified JSON)
+                        try:
+                            mlflow.log_param(key, json.dumps(val))
+                        except Exception:
+                            mlflow.log_param(key, str(val))
+                except Exception as e:
+                    # Defensive: don't fail the whole run if a single metric can't be logged
+                    logger.warning(f"Failed to log metric/param {key} to MLflow: {e}")
+            # Additionally, write the full metrics dict as an artifact (JSON) for easier retrieval/inspection
+            try:
+                # Convert numpy types and arrays to native Python types for JSON serialization
+                def _to_json_serializable(x):
+                    if isinstance(x, _np.ndarray):
+                        return x.tolist()
+                    if isinstance(x, _np.generic):
+                        return x.item()
+                    return x
+
+                serializable_metrics = {k: _to_json_serializable(v) for k, v in filtered_metrics.items()}
+
+                # write to a temp file and log as artifact
+                with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tf:
+                    json.dump(serializable_metrics, tf, indent=2)
+                    tf_name = tf.name
+
+                try:
+                    mlflow.log_artifact(tf_name, artifact_path='metrics')
+                except Exception as e:
+                    logger.warning(f"Failed to log metrics JSON as artifact to MLflow: {e}")
+                finally:
+                    try:
+                        _os.remove(tf_name)
+                    except Exception:
+                        pass
+            except Exception as e:
+                logger.warning(f"Failed to create/log metrics artifact: {e}")
+
             logger.info(f"Metrics tracked in MLflow: {filtered_metrics}")
 
     def train_model(self):
@@ -105,6 +150,14 @@ class ModelTrainer:
             Path(final_model_path).parent.mkdir(parents=True, exist_ok=True)
             model.save(final_model_path)
             logger.info(f"Model saved to production path: {final_model_path}")
+
+            # Save metrics snapshot to training_results for frontend consumption
+            try:
+                model_name = Path(final_model_path).stem
+                saved_path = save_metrics(metrics, model_name=model_name)
+                logger.info(f"Saved evaluation metrics to: {saved_path}")
+            except Exception as e:
+                logger.warning(f"Failed to save metrics snapshot: {str(e)}")
 
             return {
                 'model': model,
