@@ -1,11 +1,16 @@
 # **Social Media Sentiment & Trend Analysis Platform**
 
-[Link to Live Dashboard]()
-[Link to DagsHub Repository]()
+[Link to Live Dashboard/App](https://sentiment-analysis-lstm-on.vercel.app/)
+
+[Link to DagsHub Repository](https://dagshub.com/AnupamKNN/sentiment_analysis_lstm)
+
 [Link to Presentation Video]()
+
 [Link to LinkedIn Post]()
-[Link to small dataset to test the app]()
-[Link to large dataset to test the app]()
+
+[Link to small dataset to test the app](https://drive.google.com/file/d/1tkglwak7iBcCBoIIur_evuyVrgbT1kED/view?usp=sharing)
+
+[Link to large dataset to test the app](https://drive.google.com/file/d/1Ys6c39l-NLJiJarXBDyZUSPO0L7hdYXz/view?usp=sharing)
 
 
 ## 🏢 About the Client
@@ -108,25 +113,25 @@ The goal is to build a **scientifically validated, production-grade NLP platform
 **Pull image from GHCR:**
 
 ```bash
-docker pull ghcr.io/anupamknn/social-media-sentiment:latest
+docker pull ghcr.io/anupamknn/sentiment_analysis_lstm:latest
 ```
 
 **Or build locally:**
 
 ```bash
-git clone https://github.com/AnupamKNN/social-media-sentiment.git
-cd social-media-sentiment
-docker build -t social-media-sentiment:latest .
+git clone https://github.com/AnupamKNN/sentiment_analysis_lstm.git
+cd sentiment_analysis_lstm
+docker build -t sentiment_analysis_lstm:latest .
 ```
 
 **Run the container:**
 
 ```bash
-docker run -p 8501:8501 social-media-sentiment:latest
+docker run -p 8000:8000 sentiment_analysis:latest
 ```
 
-Access dashboard at:
-[http://localhost:8501](http://localhost:8501)
+Access FastAPI Dashboard at:
+[http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
@@ -135,8 +140,8 @@ Access dashboard at:
 #### 1️⃣ Clone Repo
 
 ```bash
-git clone https://github.com/AnupamKNN/social-media-sentiment.git
-cd social-media-sentiment
+git clone https://github.com/AnupamKNN/sentiment_analysis_lstm.git
+cd sentiment_analysis_lstm
 ```
 
 #### 2️⃣ Create & Activate Virtual Environment
@@ -164,15 +169,18 @@ cp .env.example .env
 Set values for:
 
 * `MLFLOW_TRACKING_URI`
-* `MLFLOW_TRACKING_USERNAME`, `MLFLOW_TRACKING_PASSWORD`
-* API keys (e.g., OpenAI, HuggingFace)
-* Database credentials
+* `MLFLOW_TRACKING_USERNAME`,
+* `MLFLOW_TRACKING_PASSWORD`
 
 #### 5️⃣ Start App
 
+To access the backend, which serves the model to the frontend via Fast API
+
 ```bash
-streamlit run app.py
+python app.py
 ```
+
+To access the frontend to which the model is being served, click on the "Link to Live Dashboard/App"
 
 ---
 
@@ -197,12 +205,12 @@ The project uses a **scientific methodology** to compare every major NLP approac
 
 ### 3. **Model Architectures Compared**
 
-* Logistic Regression, SVM, RandomForest
-* LSTM (uni/bidirectional)
-* GRU (uni/bidirectional)
-* Hybrid LSTM-GRU
-* Attention-based RNNs
-* Transformer encoder variants
+* Logistic Regression, SVM, RandomForest (baseline models)
+* LSTM
+* Bidirectional LSTM
+* LSTM + Attention
+* CNN-LSTM Hybrid
+* Transformer-Style Self Attention
 
 ### 4. **Evaluation Metrics**
 
@@ -248,19 +256,19 @@ All experiments are tracked in **MLflow** and datasets/models are versioned usin
 
 | Metric   | Value (baseline) |
 | -------- | ---------------- |
-| F1-score | ~0.65            |
-| Accuracy | ~0.70            |
-| Latency  | 120–300 ms       |
+| F1-score | 65%              |
+| Accuracy | 70%              |
+| Latency  | 220–300 ms       |
 
 ### Final (Current Production Candidate — `lstm_attention_model`)
 
 | Metric           | Value                                |
 | ---------------- | ------------------------------------ |
-| F1-score         | **0.83936**                          |
-| Precision        | **0.83823**                          |
-| Recall           | **0.84103**                          |
-| Accuracy         | **0.83963**                          |
-| ROC-AUC          | **0.91920**                          |
+| F1-score         | **83.94%**                           |
+| Precision        | **83.82%**                           |
+| Recall           | **84.10%**                           |
+| Accuracy         | **83.96%**                           |
+| ROC-AUC          | **91.92%**                           |
 | Confusion Matrix | `[[100523, 19477], [19076, 100924]]` |
 
 **Operational targets met:**
