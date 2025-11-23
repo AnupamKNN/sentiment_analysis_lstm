@@ -127,7 +127,7 @@ docker build -t sentiment_analysis_lstm:latest .
 **Run the container:**
 
 ```bash
-docker run -p 8000:8000 sentiment_analysis_lstm:latest
+docker run -p 8000:8000 ghcr.io/anupamknn/sentiment_analysis_lstm:latest
 ```
 
 Access FastAPI Dashboard at:
