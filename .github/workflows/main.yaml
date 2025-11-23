@@ -60,7 +60,7 @@ jobs:
           context: .
           file: Dockerfile.api
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/sentiment_analysis_lstm:latest
+          tags: ghcr.io/anupamknn/sentiment_analysis_lstm:latest
 
   # 3. Continuous Deployment (Trigger Render)
   deploy:
