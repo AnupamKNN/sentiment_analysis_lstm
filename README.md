@@ -13,7 +13,7 @@
 [Link to large dataset to test the app](https://drive.google.com/file/d/1Ys6c39l-NLJiJarXBDyZUSPO0L7hdYXz/view?usp=sharing)
 
 
-## 🏢 About the Client
+## 🏢 About the Company
 
 **VelociSense Analytics** is a leading AI-powered social intelligence company serving enterprise customers across tourism, retail, banking, and hospitality. The organization specializes in transforming large-scale, unstructured social media data into real-time insights that drive customer experience optimization, brand reputation management, and competitor benchmarking.
 
