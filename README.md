@@ -25,7 +25,6 @@ The company's mission revolves around:
 * Enabling organizations to respond **30% faster** to customer sentiment crises
 * Providing **scalable and automated pipelines** for multi-platform data ingestion
 * Delivering **predictive insights** for brand, product, and customer experience teams
-* Maintaining full **GDPR-compliant**, audit-ready processing pipelines
 
 This platform demonstrates a complete **end-to-end enterprise NLP system** designed for scalability, interpretability, and operational efficiency.
 
