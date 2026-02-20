@@ -70,7 +70,7 @@ The goal is to build a **scientifically validated, production-grade NLP platform
 * Develop a **systematic comparison framework** across preprocessing, embeddings, and models
 * Deliver a **scalable FastAPI-based inference service** with <200ms latency
 * Implement complete **MLOps automation** for retraining, deployment, and monitoring
-* Provide a **Streamlit dashboard** for real-time sentiment intelligence
+* Provide a **React/Node.js dashboard** for real-time sentiment intelligence
 * Ensure full **GDPR compliance**, encryption, and secure data handling
 
 ---
