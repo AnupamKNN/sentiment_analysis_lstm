@@ -6,7 +6,7 @@
 
 [Link to DagsHub Repository](https://dagshub.com/AnupamKNN/sentiment_analysis_lstm)
 
-[Link to Presentation Video]()
+[Link to Presentation Video](https://youtu.be/c4SfwuAnRz8)
 
 [Link to LinkedIn Post]()
 
