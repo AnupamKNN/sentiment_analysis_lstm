@@ -1,5 +1,7 @@
 # **Social Media Sentiment & Trend Analysis Platform**
 
+[Link to Backend Activation (Before accessing Live App)](https://sentiment-analysis-lstm-0uqd.onrender.com)
+
 [Link to Live Dashboard/App](https://sentiment-analysis-lstm-on.vercel.app/)
 
 [Link to DagsHub Repository](https://dagshub.com/AnupamKNN/sentiment_analysis_lstm)
